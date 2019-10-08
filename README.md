@@ -31,6 +31,7 @@ hisat2-build --ss TM-1_V2.1.ss --exon TM-1_V2.1.exon TM-1_V2.1.fa TM-1_V2.1
 ```
 #### step 2: mapping
 
+```shell
 ls *gz|perl -pi -e 's/.R[12].clean.fastq.gz//' > sample.txt
 
 cat sample.txt|while read id; do hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 ${id}.R1.clean.fastq.gz -2 
@@ -69,9 +70,9 @@ or
 /public/home/zhaoting/biosoftware/samtools-1.6/samtools sort -@ 1 -o V003-V004-1.sam.sorted.bam V003-V004-1.sam && rm V003-V004-1.sam
 
 /public/home/zhaoting/biosoftware/samtools-1.6/samtools sort -@ 1 -o V003-V004.sam.sorted.bam V003-V004.sam && rm V003-V004.sam
-
+```
 #### step 3 :assemble
-
+```shell
 ls *bam|while read id; do stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o ${id}.gtf $id;done
 
 or
@@ -85,10 +86,11 @@ stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o V003-V004-1.sam.sorted.bam.gtf
 stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o V003-V004.sam.sorted.bam.gtf V003-V004.sam.sorted.bam
 
 note: add --rf if this data is fr-firstrand
-
+```
 
 #### step 4: lncRNA prediction
 
+```shell
 ls *gtf > mergelist.txt
 
 stringtie --merge -o merged.gtf -c 3 ./mergelist.txt
@@ -130,9 +132,11 @@ rm Novel_transcript_cpc_nocoding.txt
 rm Novel.transcript_with_domain.txt
 
 rm pfam_scan_eQTL.txt
+```
 
 #### step5: Estimate transcript abundances
 
+```shell
 ls *bam|while read id; do stringtie -A ${id}_fpkm.txt --rf -p 8 -G ./lncRNA_mRNA.gtf -o temp.gtf $id;done
 
 or
@@ -148,10 +152,10 @@ stringtie -A V003-V004.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.
 stringtie -A V007-V008-1.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.gene_lncRNA.gtf -o temp.gtf V007-V008-1.sam.sorted.bam
 
 ls *fpkm.txt|while read id; do perl -ne 'print unless /^STRG/' $id > 1 && mv 1 $id;done
-
+```
 #### step6: gtf2bed
-
+```shell
 perl -ne 'print if /\ttranscript\t/' lncRNA_mRNA.gtf|perl -pi -e 's/gene_id.*?transcript_id "//'|perl -pi -e 's/";//'|awk '{print $1"\t"$4"\t"$5"\t"$9"\t"$6"\t"$7}' > Ga_lncRNA_mRNA.bed
 
-
+```
 
