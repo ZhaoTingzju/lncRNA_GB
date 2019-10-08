@@ -2,32 +2,19 @@
 
 updated reference: 
 
-G.arboreum_CRI-A2_assembly_v1.0.fasta (CAS)
-
-TM-1_V2.1.fa (ZJU)
-
-Graimondii_221.fa
+G.arboreum_CRI-A2_assembly_v1.0.fasta (CAS);TM-1_V2.1.fa (ZJU);Graimondii_221.fa(USA)
 
 
-software used in this study:
 
-Hisat2 version 2.1.0
-
-samtools version 1.6
-
-stringtie 2.0
-
-gffcompare v0.10.4
-
-CPC,py 0.1
-
-HMMER 3.1b2
-
-pfam_scan
-
-TransDecoder V5.3.0
-
-bedtools v2.26.0
+Hisat2 version 2.1.0;
+samtools version 1.6;
+stringtie 2.0;
+gffcompare v0.10.4;
+CPC,py 0.1;
+HMMER 3.1b2;
+pfam_scan;
+TransDecoder V5.3.0;
+bedtools v2.26.0;
 
 the pipline
 
@@ -51,11 +38,17 @@ ${id}.R2.clean.fastq.gz -S ${id}.sam
 or
 
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V001-V002.R1.clean.fastq.gz -2 V001-V002.R2.clean.fastq.gz -S V001-V002.sam
+
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V001-V002-1.R1.clean.fastq.gz -2 V001-V002-1.R2.clean.fastq.gz -S V001-V002-1.sam
+
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V003-V004.R1.clean.fastq.gz -2 V003-V004.R2.clean.fastq.gz -S V003-V004.sam
+
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V003-V004-1.R1.clean.fastq.gz -2 V003-V004-1.R2.clean.fastq.gz -S V003-V004-1.sam
+
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V007-V008.R1.clean.fastq.gz -2 V007-V008.R2.clean.fastq.gz -S V007-V008.sam
+
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V007-V008-1.R1.clean.fastq.gz -2 V007-V008-1.R2.clean.fastq.gz -S V007-V008-1.sam
+
 hisat2 -p 8 --dta -x ../../ref/TM-1_V2.1 -1 V009-V010.R1.clean.fastq.gz -2 V009-V010.R2.clean.fastq.gz -S V009-V010.sam
 
 If its single ended data and forward stranded you need to set: -rna-strandness F If its paired end data and forward stranded you need to set: -rna-strandness FR
@@ -69,8 +62,11 @@ most strand-specific data are fr-firststrand , use -rna-strandness RF
 or
 
 /public/home/zhaoting/biosoftware/samtools-1.6/samtools sort -@ 1 -o V001-V002-1.sam.sorted.bam V001-V002-1.sam && rm V001-V002-1.sam
+
 /public/home/zhaoting/biosoftware/samtools-1.6/samtools sort -@ 1 -o V001-V002.sam.sorted.bam V001-V002.sam && rm V001-V002.sam
+
 /public/home/zhaoting/biosoftware/samtools-1.6/samtools sort -@ 1 -o V003-V004-1.sam.sorted.bam V003-V004-1.sam && rm V003-V004-1.sam
+
 /public/home/zhaoting/biosoftware/samtools-1.6/samtools sort -@ 1 -o V003-V004.sam.sorted.bam V003-V004.sam && rm V003-V004.sam
 
 #### step 3 :assemble
@@ -80,9 +76,13 @@ ls *bam|while read id; do stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o ${id
 or
 
 stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o V001-V002-1.sam.sorted.bam.gtf V001-V002-1.sam.sorted.bam
+
 stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o V001-V002.sam.sorted.bam.gtf V001-V002.sam.sorted.bam
+
 stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o V003-V004-1.sam.sorted.bam.gtf V003-V004-1.sam.sorted.bam
+
 stringtie -G ../../ref/TM-1_V2.1.gene.gtf -p 2 -o V003-V004.sam.sorted.bam.gtf V003-V004.sam.sorted.bam
+
 note: add --rf if this data is fr-firstrand
 
 
@@ -137,10 +137,15 @@ ls *bam|while read id; do stringtie -A ${id}_fpkm.txt --rf -p 8 -G ./lncRNA_mRNA
 or
 
 stringtie -A V001-V002-1.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.gene_lncRNA.gtf -o temp.gtf V001-V002-1.sam.sorted.bam
+
 stringtie -A V001-V002.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.gene_lncRNA.gtf -o temp.gtf V001-V002.sam.sorted.bam
+
 stringtie -A V003-V004-1.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.gene_lncRNA.gtf -o temp.gtf V003-V004-1.sam.sorted.bam
+
 stringtie -A V003-V004.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.gene_lncRNA.gtf -o temp.gtf V003-V004.sam.sorted.bam
+
 stringtie -A V007-V008-1.sam.sorted.bam_fpkm.txt -p 8 --rf -G ../../ref/TM-1_V2.1.gene_lncRNA.gtf -o temp.gtf V007-V008-1.sam.sorted.bam
+
 ls *fpkm.txt|while read id; do perl -ne 'print unless /^STRG/' $id > 1 && mv 1 $id;done
 
 #### step6: gtf2bed
