@@ -20,6 +20,7 @@ the pipline
 
 #### step1 : building genome index
 
+```shell
 gffread -T -o TM-1_V2.1.gene.gtf TM-1_V2.1.gene.gff3
 
 extract_splice_sites.py TM-1_V2.1.gene.gtf > TM-1_V2.1.ss 
@@ -27,7 +28,7 @@ extract_splice_sites.py TM-1_V2.1.gene.gtf > TM-1_V2.1.ss
 extract_exons.py TM-1_V2.1.gene.gtf > TM-1_V2.1.exon
 
 hisat2-build --ss TM-1_V2.1.ss --exon TM-1_V2.1.exon TM-1_V2.1.fa TM-1_V2.1
-
+```
 #### step 2: mapping
 
 ls *gz|perl -pi -e 's/.R[12].clean.fastq.gz//' > sample.txt
