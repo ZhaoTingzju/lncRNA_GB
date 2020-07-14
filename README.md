@@ -70,7 +70,7 @@ ls *gtf > mergelist.txt
 stringtie --merge -o merged.gtf -c 3 ./mergelist.txt
 gffcompare -r ../ref/TM-1_V2.1.gene.gtf -p 4 merged.gtf -o merged_lncRNA
 awk '$3 == "x"|| $3 == "u"|| $3 == "i" {print $0}' merged_lncRNA.merged.gtf.tmap > novel.gtf.tmap
-awk '$1 >200 {print}' novel.gtf.tmap > novel.longRNA.gtf.tmap
+awk '$10 >200 {print}' novel.gtf.tmap > novel.longRNA.gtf.tmap
 awk '{print $5}' novel.longRNA.gtf.tmap | perl ~/zt_script/extract_gtf_by_name.pl merged.gtf - > novel.longRNA.gtf
 gffread -g ~/eGWAS/ref/TM-1_V2.1.fa -w exon.fa ./novel.longRNA.gtf
 TransDecoder.LongOrfs -t exon.fa # This step generated a file named longest_orfs.ped
